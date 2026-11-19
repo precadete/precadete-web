@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRE CADETE · Prepárate para el ingreso a la PNP</title>
+<meta name="description" content="PRE CADETE: app de preparación para el examen de admisión a la PNP. Examen completo, práctica por materias y módulos, estadísticas, corrección al instante y explicación de cada respuesta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: herramienta de estudio seria y premium para postulantes a la PNP; calma y foco
+   IDEA: la ficha óptica del examen de admisión, vista de noche bajo luz azul
+   PICTURE: la propia app en un teléfono, con la ficha óptica marcada detrás
+   COLOUR and TYPE: noche #060816, índigo #5b5ff0→#3a2fa8, lavanda #aab0ff, halo cian #47c6ff; Sora + Manrope
+   LAYOUT: portada con teléfono, funciones, examen por cursos, pantalla de pregunta, descarga, pie */
+:root{color-scheme:dark;--bg:#060816;--s1:#0f1330;--s2:#151a40;--line:#262c66;--line2:#353c86;--ink:#eef0ff;--mute:#9399c6;--lav:#aab0ff;--p1:#5b5ff0;--p2:#3a2fa8;--cy:#47c6ff;--ok:#22c55e;--okb:#0f2e1e;--no:#f05252}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Manrope,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Sora,Manrope,sans-serif;margin:0;line-height:1.08;text-wrap:balance}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--lav);outline-offset:3px;border-radius:10px}
+svg{display:block}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,18px)}
+.band{padding:clamp(56px,8vw,110px) 0;position:relative}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:#060816cc;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #ffffff10}
+.nav .wrap{display:flex;align-items:center;gap:24px;min-height:68px}
+.logo{display:flex;align-items:center;gap:10px;margin-right:auto}
+.logo svg{width:36px;height:38px;flex:none}
+.logo b{font:700 17px Sora,sans-serif;letter-spacing:2.5px;background:linear-gradient(#fff,#b9bdff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.links{display:flex;gap:26px;font-weight:600;font-size:15px;color:var(--mute)}
+.links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 20px;border-radius:14px;font-weight:700;white-space:nowrap;transition:transform .2s,box-shadow .2s}
+.btn svg{width:20px;height:20px;flex:none}
+.btn.p{background:linear-gradient(180deg,var(--p1),var(--p2));border:1px solid #8a90ff;box-shadow:0 12px 26px -12px #5b5ff0,inset 0 1px 0 #ffffff33}
+.btn.w{background:#fff;color:#2b2490}
+.btn.g{border:1px solid var(--line2);background:#ffffff08}
+.btn:hover{transform:translateY(-2px)}
+.nav .btn{min-height:42px;padding:0 16px;font-size:14px}
+
+/* hero */
+.hero{overflow:hidden;padding-top:clamp(40px,6vw,80px)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:-1}
+.hero::before{width:520px;height:620px;left:-260px;top:-40px;background:radial-gradient(#6fb6ff,#3b4bff 45%,#6a2bd9 75%,transparent);opacity:.35}
+.hero::after{width:560px;height:560px;right:-220px;bottom:-160px;background:radial-gradient(#47c6ff,#3047ff 45%,#8a3cff 75%,transparent);opacity:.32}
+.hgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#5b5ff022;border:1px solid #5b5ff066;color:#c7caff;border-radius:20px;padding:5px 14px;font-size:14px;font-weight:600;margin-bottom:22px}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--cy);box-shadow:0 0 0 4px #47c6ff33}
+.hero h1{font-size:clamp(36px,5.2vw,58px);font-weight:800;letter-spacing:-.5px}
+.hero h1 span{background:linear-gradient(90deg,#fff 10%,#b9bdff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:clamp(16px,1.6vw,19px);color:#c6c9ee;max-width:540px;margin:20px 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:36px;padding-top:24px;border-top:1px solid #ffffff14}
+.facts div{font-size:14px;color:var(--mute)}
+.facts b{display:block;font:700 26px Sora,sans-serif;color:var(--ink)}
+
+/* phone */
+.stage{position:relative;display:grid;place-items:center;min-height:560px}
+.sheet{position:absolute;width:min(46%,220px);left:2%;top:8%;transform:rotate(-9deg);filter:drop-shadow(0 20px 30px #0008)}
+.phone{position:relative;width:min(100%,300px);aspect-ratio:300/610;border-radius:44px;background:#10132a;padding:10px;box-shadow:0 50px 90px -30px #000,0 0 0 1px #2a2f66,inset 0 0 0 1px #ffffff10;animation:float 6s ease-in-out infinite}
+.stage .phone{margin-left:18%}
+@keyframes float{50%{transform:translateY(-12px)}}
+.scr{height:100%;border-radius:35px;background:var(--bg);overflow:hidden;position:relative;isolation:isolate;font-size:11px;line-height:1.4;padding:30px 13px 14px}
+.scr::before{content:"";position:absolute;z-index:-1;width:200px;height:300px;left:-130px;top:60px;border-radius:50%;filter:blur(40px);background:radial-gradient(#6fb6ff,#3b4bff 50%,transparent);opacity:.4}
+.scr::after{content:"";position:absolute;top:10px;left:50%;width:76px;height:20px;margin-left:-38px;border-radius:12px;background:#000}
+.sb{display:flex;align-items:center;gap:7px;margin-bottom:12px}
+.sb svg{width:26px;height:28px}
+.sb b{display:block;font:700 11px Sora,sans-serif;letter-spacing:2px;color:#d9dbff}
+.sb small{display:block;color:var(--mute);font-size:9px}
+.scr h4{font:700 15px Sora,sans-serif;margin:0 0 2px}
+.scr .sub{color:var(--mute);margin:0 0 10px;font-size:10px}
+.mh{position:relative;overflow:hidden;border-radius:14px;padding:12px;background:linear-gradient(150deg,#5b5ff0,#3d33b3 55%,#21195f);border:1px solid #8a90ff;margin-bottom:10px}
+.mh b{display:block;font:700 13px Sora,sans-serif}
+.mh p{margin:3px 0 8px;color:#dfe1ff;font-size:9.5px;max-width:62%}
+.mh .ch{display:flex;flex-wrap:wrap;gap:4px;max-width:66%;margin-bottom:9px}
+.mh .ch span{background:#ffffff1f;border:1px solid #ffffff2e;border-radius:10px;padding:1px 6px;font-size:8.5px;font-weight:600}
+.mh .go{display:inline-block;background:#fff;color:#2b2490;font-weight:700;border-radius:8px;padding:5px 10px;font-size:10px}
+.mh svg{position:absolute;right:-8px;top:12px;width:72px;transform:rotate(8deg)}
+.ml{font:600 9px Sora,sans-serif;letter-spacing:1.2px;color:var(--lav);margin:12px 2px 7px}
+.mr{display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,#151a40e6,#0f1330e6);border:1px solid var(--line);border-radius:11px;padding:8px;margin-bottom:6px}
+.mr i{width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;background:linear-gradient(160deg,#5b5ff044,#3a2fa833);border:1px solid #5b5ff066;color:#c7caff}
+.mr i svg{width:15px;height:15px}
+.mr b{display:block;font-size:10.5px}.mr span{color:var(--mute);font-size:9px}
+
+/* sections */
+.head{max-width:680px;margin-bottom:44px}
+.head h2{font-size:clamp(30px,3.8vw,44px);font-weight:800}
+.head p{color:var(--mute);font-size:17px;margin:14px 0 0}
+.feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:linear-gradient(180deg,#151a40,#0f1330);border:1px solid var(--line);border-radius:20px;padding:24px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.card .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(160deg,#5b5ff044,#3a2fa833);border:1px solid #5b5ff066;color:#c7caff;margin-bottom:18px}
+.card .ic svg{width:26px;height:26px}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{margin:0;color:var(--mute);font-size:15px}
+.card.big{grid-column:span 2;background:linear-gradient(150deg,#5b5ff0,#3d33b3 60%,#21195f);border-color:#8a90ff;position:relative;overflow:hidden}
+.card.big p{color:#dfe1ff;max-width:60%}
+.card.big .ic{background:#ffffff1f;border-color:#ffffff33;color:#fff}
+.card.big .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;max-width:62%}
+.card.big .chips span{background:#ffffff1f;border:1px solid #ffffff2e;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600}
+.card.big svg.f{position:absolute;right:-10px;top:24px;width:150px;transform:rotate(8deg);filter:drop-shadow(0 10px 14px #0006)}
+
+.alt{background:linear-gradient(180deg,#0a0d22,#060816)}
+.egrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,4vw,56px);align-items:start}
+.course{display:grid;grid-template-columns:minmax(0,1fr) 120px 44px;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #ffffff12}
+.course b{font-weight:600}
+.course .bar{height:8px;border-radius:4px;background:#1c2150;overflow:hidden}
+.course .bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cy),var(--p1))}
+.course span{text-align:right;font:700 16px Sora,sans-serif;color:var(--lav)}
+.total{display:flex;justify-content:space-between;padding:16px 0 0;font:700 17px Sora,sans-serif}
+.box{background:linear-gradient(180deg,#151a40,#0f1330);border:1px solid var(--line);border-radius:20px;padding:26px}
+.box h3{font-size:20px;margin-bottom:6px}
+.box>p{color:var(--mute);margin:0 0 18px;font-size:15px}
+.ap{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid #ffffff12}
+.ap i{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;background:#47c6ff1a;border:1px solid #47c6ff44;color:var(--cy)}
+.ap i svg{width:22px;height:22px}
+.ap b{display:block}.ap span{color:var(--mute);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.kpis div{background:#0b0f28;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;color:var(--mute);font-size:13px}
+.kpis b{display:block;font:700 22px Sora,sans-serif;color:var(--ink)}
+
+.qgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.qgrid .stage{min-height:600px}
+.qgrid .phone{margin:0}
+.ticks{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:18px}
+.ticks li{display:flex;gap:14px}
+.ticks li>i{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;background:#22c55e22;color:#4ade80;border:1px solid #22c55e55;margin-top:2px}
+.ticks li>i svg{width:16px;height:16px}
+.ticks b{display:block;font-size:17px}.ticks span{color:var(--mute);font-size:15px}
+.qt{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.qt span{background:var(--s1);border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-weight:600;font-size:9.5px}
+.qt em{font-style:normal;font:600 10px Sora,sans-serif;color:var(--lav)}
+.prog{height:3px;background:#ffffff12;border-radius:2px;margin-bottom:12px;overflow:hidden}.prog i{display:block;height:100%;width:35%;background:linear-gradient(90deg,var(--cy),var(--p1))}
+.tg{font-size:8.5px;font-weight:700;letter-spacing:1px;color:var(--cy)}
+.en{font:600 13px/1.4 Sora,sans-serif;margin:4px 0 11px}
+.op{display:flex;align-items:center;gap:8px;background:var(--s1);border:1.5px solid var(--line);border-radius:10px;padding:6px 8px;margin-bottom:6px;font-weight:600;font-size:11px}
+.op .l{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex:none;font:700 10px Sora,sans-serif;background:#ffffff0d;border:1px solid var(--line2);color:var(--lav)}
+.op.dim{opacity:.45}
+.op.ok{border-color:var(--ok);background:var(--okb)}.op.ok .l{background:var(--ok);border-color:var(--ok);color:#fff}
+.op.ok svg{width:14px;height:14px;margin-left:auto;color:#4ade80}
+.ex{background:#5b5ff01a;border:1px solid #5b5ff055;border-radius:10px;padding:8px 9px;margin-top:8px;font-size:10px;color:#d4d7ff}
+.ex small{display:block;font-size:8px;font-weight:700;letter-spacing:1px;color:var(--lav);margin-bottom:2px}
+.vd{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#123826,#0b1f17);border:1px solid #22c55e59;border-radius:11px;padding:7px 8px;margin-top:8px}
+.vd i{width:24px;height:24px;border-radius:50%;background:var(--ok);display:grid;place-items:center;flex:none}.vd i svg{width:13px;height:13px;color:#fff}
+.vd b{display:block;color:#86efac;font-size:10.5px}.vd span{font-size:9px;color:#c9cdf0}
+
+.dl{text-align:center;overflow:hidden}
+.dl .inner{position:relative;border-radius:32px;padding:clamp(40px,6vw,72px) 24px;background:linear-gradient(150deg,#5b5ff0,#3d33b3 55%,#1d1658);border:1px solid #8a90ff;box-shadow:0 30px 60px -30px #4b4fd8;overflow:hidden;isolation:isolate}
+.dl .inner::after{content:"";position:absolute;inset:auto -10% -60% auto;width:420px;height:420px;border-radius:50%;background:radial-gradient(#47c6ff,transparent 70%);opacity:.35;z-index:-1}
+.dl svg.em{width:72px;height:76px;margin:0 auto 18px}
+.dl h2{font-size:clamp(28px,4vw,44px);font-weight:800}
+.dl p{color:#dfe1ff;max-width:560px;margin:14px auto 28px;font-size:17px}
+.gp{display:inline-flex;align-items:center;gap:12px;background:#0b0d1f;border:1px solid #ffffff40;border-radius:14px;padding:10px 22px 10px 16px;text-align:left}
+.gp svg{width:28px;height:28px}
+.gp small{display:block;font-size:12px;color:#c6c9ee;line-height:1.2}
+.gp b{display:block;font:700 18px Sora,sans-serif;line-height:1.2}
+
+footer{border-top:1px solid #ffffff12;padding:36px 0 44px;color:var(--mute);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between}
+.redes{display:flex;gap:10px}.redes a{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--s1);border:1px solid var(--line);color:var(--lav);transition:border-color .2s,color .2s}.redes a:hover{color:#fff;border-color:var(--line2)}.redes svg{width:20px;height:20px}
+.flinks{display:flex;flex-wrap:wrap;gap:8px 22px}.flinks a{color:var(--lav);font-weight:600}.flinks a:hover{color:#fff}
+footer .by img{display:inline;vertical-align:-3px;margin:0 2px}
+footer{padding-bottom:110px!important}
+footer .note{flex-basis:100%;font-size:13px;color:#6a70a3;margin:0}
+
+.demo{background:linear-gradient(180deg,#151a40,#0f1330);border:1px solid var(--line2);border-radius:24px;padding:clamp(18px,3vw,28px);box-shadow:0 30px 60px -30px #000;position:relative;overflow:hidden;isolation:isolate}
+.demo::before{content:"";position:absolute;z-index:-1;width:260px;height:260px;right:-120px;top:-120px;border-radius:50%;filter:blur(50px);background:radial-gradient(#47c6ff,#3b4bff 60%,transparent);opacity:.35}
+.dtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.dtop .tg{font-size:12px}
+.dtop em{font-style:normal;font-size:13px;color:var(--mute);font-weight:600}
+.demo .en{font-size:clamp(18px,2vw,21px);margin:0 0 18px}
+.dop{display:flex;align-items:center;gap:12px;width:100%;margin-bottom:10px;text-align:left;background:var(--s1);border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;min-height:56px;font:600 16px Manrope,sans-serif;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.dop:not(:disabled):hover{border-color:var(--line2);background:var(--s2)}
+.dop .l{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;font:700 14px Sora,sans-serif;background:#ffffff0d;border:1px solid var(--line2);color:var(--lav)}
+.dop .x{flex:1}.dop svg{width:22px;height:22px;flex:none}
+.dop:disabled{cursor:default}
+.dop.ok{border-color:var(--ok);background:var(--okb);animation:pop .35s ease}.dop.ok .l{background:var(--ok);border-color:var(--ok);color:#fff}.dop.ok svg{color:#4ade80}
+.dop.no{border-color:var(--no);background:#3a1418;animation:shake .35s ease}.dop.no .l{background:var(--no);border-color:var(--no);color:#fff}.dop.no svg{color:#f87171}
+.dop.dim{opacity:.45}
+@keyframes pop{50%{transform:scale(1.02)}}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.dv{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;margin-top:6px;border:1px solid}
+.dv.ok{background:linear-gradient(135deg,#123826,#0b1f17);border-color:#22c55e59}.dv.no{background:linear-gradient(135deg,#40171c,#241012);border-color:#f0525259}
+.dv i{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;color:#fff}.dv.ok i{background:var(--ok)}.dv.no i{background:var(--no)}.dv i svg{width:20px;height:20px}
+.dv b{display:block;font:700 15px Sora,sans-serif}.dv.ok b{color:#86efac}.dv.no b{color:#fca5a5}.dv span{font-size:14px;color:#c9cdf0}
+.dexp{background:#5b5ff01a;border:1px solid #5b5ff055;border-radius:14px;padding:14px;margin-top:10px;font-size:15px;color:#d4d7ff}
+.dexp small{display:block;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--lav);margin-bottom:4px}
+.dact{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.dact .btn{flex:1 1 180px;min-height:48px;cursor:pointer;color:var(--ink);font:700 15px Manrope,sans-serif}
+.team{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(28px,5vw,72px);align-items:center}
+.odlogo{display:block;height:46px;width:auto;margin-bottom:26px}
+.asc{display:flex;gap:18px;align-items:center;max-width:460px;background:linear-gradient(180deg,#151a40,#0f1330);border:1px solid var(--line);border-radius:24px;padding:22px}
+.asc img{width:76px;height:76px;object-fit:contain;flex:none}
+.asc small{display:block;color:var(--cy);font-weight:700;font-size:13px}.asc b{display:block;font:700 22px Sora,sans-serif;margin:2px 0 4px}.asc p{margin:0;color:var(--mute);font-size:15px}
+.wa{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));z-index:30;display:grid;place-items:center;width:60px;height:60px;background:#25d366;color:#fff;border-radius:50%;box-shadow:0 14px 30px -10px #000,0 0 0 4px #25d36633;transition:transform .2s}
+.wa:hover{transform:translateY(-3px)}.wa svg{width:32px;height:32px}
+@media(max-width:600px){.asc{flex-direction:column;align-items:flex-start}}
+@media(max-width:960px){.team{grid-template-columns:minmax(0,1fr)}.qgrid .demo{order:2}
+  .links{display:none}
+  .hgrid,.egrid,.qgrid{grid-template-columns:minmax(0,1fr)}
+  .stage{min-height:500px}
+  .feats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .nav .btn{display:none}
+  .feats{grid-template-columns:minmax(0,1fr)}
+  .card.big{grid-column:auto}.card.big p,.card.big .chips{max-width:none}.card.big svg.f{display:none}
+  .stage .phone{margin-left:12%;width:min(78%,280px)}
+  .sheet{width:40%;left:0}
+  .course{grid-template-columns:minmax(0,1fr) 70px 36px;gap:10px}
+  .ctas .btn{flex:1 1 100%}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <a class="logo" href="#inicio" aria-label="PRE CADETE, inicio"><svg viewBox="4 2 92 96" data-emblem></svg><b>PRE CADETE</b></a>
+  <div class="links"><a href="#funciones">Funciones</a><a href="#examen">Examen</a><a href="#practica">Pruébalo</a><a href="#nosotros">Nosotros</a></div>
+  <a class="btn p" href="#descarga">Descargar app</a>
+</div></nav>
+
+<header class="hero band" id="inicio"><div class="wrap hgrid">
+  <div>
+    <span class="pill"><i></i>Ingreso PNP 2027</span>
+    <h1>La plataforma completa para tu preparación e <span>ingreso a la PNP</span></h1>
+    <p class="lead">Exámenes completos con la misma distribución del prospecto, práctica por materias y módulos, y corrección al instante con la explicación de cada respuesta. Todo en tu celular, incluso sin internet.</p>
+    <div class="ctas">
+      <a class="btn w" href="#descarga"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.5v17a1 1 0 0 0 1.5.86l14.5-8.5a1 1 0 0 0 0-1.72L5.5 2.64A1 1 0 0 0 4 3.5z"/></svg>Descargar en Google Play</a>
+      <a class="btn g" href="#funciones">Ver funciones</a>
+    </div>
+    <div class="facts">
+      <div><b>100</b>preguntas por examen</div>
+      <div><b>3 h</b>como el examen real</div>
+      <div><b>7</b>cursos del prospecto</div>
+    </div>
+  </div>
+  <div class="stage" aria-hidden="true">
+    <svg class="sheet" data-sheet viewBox="0 0 132 170"></svg>
+    <div class="phone"><div class="scr">
+      <div class="sb"><svg viewBox="4 2 92 96" data-emblem></svg><div><b>PRE CADETE</b><small>Prepárate para el ingreso a la PNP</small></div></div>
+      <h4>¿Qué quieres practicar hoy?</h4>
+      <p class="sub">Elige un examen y empieza.</p>
+      <div class="mh"><svg data-sheet viewBox="0 0 132 170"></svg>
+        <b>Examen completo</b><p>Las 100 preguntas con la distribución del prospecto.</p>
+        <div class="ch"><span>100 preguntas</span><span>3 horas</span><span>Nota mín. 11</span></div>
+        <span class="go">▶ Comenzar</span></div>
+      <div class="ml">MÁS PRÁCTICAS</div>
+      <div id="mrows"></div>
+    </div></div>
+  </div>
+</div></header>
+
+<section class="band" id="funciones"><div class="wrap">
+  <div class="head"><h2>Todo lo que necesitas para practicar</h2><p>Pensado para que estudies con orden y sepas exactamente en qué mejorar antes del examen.</p></div>
+  <div class="feats" id="feats"></div>
+</div></section>
+
+<section class="band alt" id="examen"><div class="wrap egrid">
+  <div>
+    <div class="head" style="margin-bottom:24px"><h2>Practica con la estructura del examen</h2><p>El examen completo reparte las 100 preguntas entre los 7 cursos, igual que el examen de conocimientos.</p></div>
+    <div id="courses"></div>
+    <div class="total"><span>Total</span><span>100 preguntas</span></div>
+  </div>
+  <div class="box">
+    <h3>Materias de apoyo</h3>
+    <p>Refuerza también las otras etapas del proceso de admisión.</p>
+    <div id="apoyo"></div>
+    <div class="kpis"><div><b>180</b>minutos</div><div><b>11</b>nota mínima</div><div><b>20</b>nota máxima</div></div>
+  </div>
+</div></section>
+
+<section class="band" id="practica"><div class="wrap qgrid">
+  <div class="demo" id="demo" aria-live="polite"></div>
+  <div>
+    <div class="head" style="margin-bottom:0"><h2>Pruébalo aquí mismo</h2><p>Responde esta pregunta de ejemplo y mira cómo funciona PRE CADETE: sabes al instante si acertaste y por qué.</p></div>
+    <ul class="ticks" id="ticks"></ul>
+  </div>
+</div></section>
+
+<section class="band alt" id="nosotros"><div class="wrap">
+  <div class="team">
+    <div>
+      <svg class="odlogo" role="img" aria-label="Orbital Devs" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 120"><g transform="translate(6 0)"><defs><linearGradient id="od" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#5b5ff0"/><stop offset="1" stop-color="#47c6ff"/></linearGradient></defs><path d="M93.83 47.69A36 36 0 1 1 72.31 26.17" fill="none" stroke="url(#od)" stroke-width="11" stroke-linecap="round"/><circle cx="60" cy="60" r="13" fill="url(#od)"/><circle cx="85.46" cy="34.54" r="7" fill="#47c6ff"/></g><path d="M169.72 83.102Q165.544 83.102 162.296 81.797Q159.048 80.492 156.815 78.23Q154.582 75.968 153.422 73.039Q152.262 70.11 152.262 66.862V65.52799999999999Q152.262 62.221999999999994 153.451 59.235Q154.64 56.248 156.93099999999998 53.986000000000004Q159.222 51.724000000000004 162.47 50.419Q165.718 49.114 169.72 49.114Q173.838 49.114 177.05700000000002 50.419Q180.276 51.724000000000004 182.538 53.986000000000004Q184.8 56.248 186.018 59.235Q187.236 62.221999999999994 187.236 65.52799999999999V66.862Q187.236 70.11 186.076 73.039Q184.916 75.968 182.683 78.23Q180.45 80.492 177.202 81.797Q173.954 83.102 169.72 83.102ZM169.72 75.272Q172.446 75.272 174.244 74.112Q176.042 72.952 176.99900000000002 70.864Q177.95600000000002 68.776 177.95600000000002 66.224Q177.95600000000002 63.498 176.97000000000003 61.43899999999999Q175.984 59.379999999999995 174.157 58.162Q172.33 56.944 169.72 56.944Q167.168 56.944 165.312 58.162Q163.456 59.379999999999995 162.499 61.43899999999999Q161.542 63.498 161.542 66.224Q161.542 68.776 162.47 70.864Q163.398 72.952 165.25400000000002 74.112Q167.11 75.272 169.72 75.272Z M192.732 82.0V50.215999999999994H200.09799999999998V63.846000000000004H199.92399999999998Q199.92399999999998 57.117999999999995 202.795 53.464Q205.666 49.809999999999995 211.118 49.809999999999995H212.33599999999998V57.814H210.016Q206.188 57.814 204.1 59.873000000000005Q202.012 61.932 202.012 65.818V82.0Z M235.696 83.044Q231.81 83.044 228.852 81.39099999999999Q225.894 79.738 224.212 76.606Q222.53 73.474 222.414 68.95H223.516V82.0H216.15V39.66H225.43V61.178L223.226 63.962Q223.4 59.147999999999996 225.053 55.870999999999995Q226.706 52.593999999999994 229.606 50.940999999999995Q232.506 49.288 236.218 49.288Q239.466 49.288 242.10500000000002 50.477Q244.744 51.666 246.6 53.840999999999994Q248.456 56.016 249.471 58.974000000000004Q250.486 61.932 250.486 65.412V66.688Q250.486 70.168 249.471 73.126Q248.456 76.084 246.51299999999998 78.31700000000001Q244.57 80.55 241.844 81.797Q239.118 83.044 235.696 83.044ZM233.26 75.272Q235.638 75.272 237.40699999999998 74.112Q239.176 72.952 240.16199999999998 70.83500000000001Q241.148 68.718 241.148 66.05Q241.148 63.324 240.16199999999998 61.294Q239.176 59.263999999999996 237.40699999999998 58.132999999999996Q235.638 57.001999999999995 233.26 57.001999999999995Q231.172 57.001999999999995 229.316 57.988Q227.46 58.974000000000004 226.329 60.801Q225.198 62.628 225.198 65.238V67.384Q225.198 69.878 226.387 71.64699999999999Q227.576 73.416 229.43200000000002 74.344Q231.288 75.272 233.26 75.272Z M257.432 82.0V50.215999999999994H266.712V82.0ZM253.198 57.06V50.215999999999994H266.712V57.06ZM261.028 47.083999999999996Q258.418 47.083999999999996 257.171 45.721Q255.924 44.358 255.924 42.269999999999996Q255.924 40.123999999999995 257.171 38.760999999999996Q258.418 37.397999999999996 261.028 37.397999999999996Q263.638 37.397999999999996 264.885 38.760999999999996Q266.132 40.123999999999995 266.132 42.269999999999996Q266.132 44.358 264.885 45.721Q263.638 47.083999999999996 261.028 47.083999999999996Z M288.738 82.406Q283.92400000000004 82.406 280.966 81.21700000000001Q278.00800000000004 80.028 276.64500000000004 77.215Q275.28200000000004 74.402 275.28200000000004 69.588V41.632H283.92400000000004V69.936Q283.92400000000004 72.198 285.11300000000006 73.387Q286.302 74.576 288.50600000000003 74.576H293.204V82.406ZM270.468 57.001999999999995V50.215999999999994H293.204V57.001999999999995Z M317.66600000000005 82.0V72.604H316.1V62.396Q316.1 59.959999999999994 314.94000000000005 58.742Q313.78000000000003 57.524 311.22800000000007 57.524Q309.95200000000006 57.524 307.86400000000003 57.582Q305.776 57.64 303.572 57.756Q301.36800000000005 57.872 299.57000000000005 57.988V50.158Q300.90400000000005 50.042 302.70200000000006 49.926Q304.50000000000006 49.809999999999995 306.41400000000004 49.751999999999995Q308.32800000000003 49.693999999999996 310.01000000000005 49.693999999999996Q314.88200000000006 49.693999999999996 318.21700000000004 51.086Q321.552 52.477999999999994 323.29200000000003 55.291Q325.03200000000004 58.104 325.03200000000004 62.512V82.0ZM307.516 82.812Q304.09400000000005 82.812 301.51300000000003 81.594Q298.932 80.376 297.482 78.08500000000001Q296.03200000000004 75.794 296.03200000000004 72.604Q296.03200000000004 69.124 297.83000000000004 66.89099999999999Q299.62800000000004 64.658 302.87600000000003 63.585Q306.124 62.512 310.35800000000006 62.512H317.14400000000006V67.674H310.30000000000007Q307.86400000000003 67.674 306.559 68.863Q305.254 70.05199999999999 305.254 72.082Q305.254 73.996 306.559 75.185Q307.86400000000003 76.374 310.30000000000007 76.374Q311.86600000000004 76.374 313.11300000000006 75.82300000000001Q314.36 75.272 315.172 73.938Q315.98400000000004 72.604 316.1 70.226L318.30400000000003 72.54599999999999Q318.014 75.852 316.70900000000006 78.114Q315.40400000000005 80.376 313.11300000000006 81.594Q310.82200000000006 82.812 307.516 82.812Z M332.326 82.0V39.66H341.66400000000004V82.0ZM328.55600000000004 46.504V39.66H341.66400000000004V46.504Z" fill="#ffffff"/><path d="M365.168 82.986Q361.80400000000003 82.986 359.04900000000004 81.739Q356.29400000000004 80.492 354.293 78.259Q352.29200000000003 76.026 351.21900000000005 73.155Q350.146 70.28399999999999 350.146 67.036V66.224Q350.146 63.092 351.19000000000005 60.221Q352.23400000000004 57.349999999999994 354.177 55.117Q356.12 52.884 358.875 51.579Q361.63 50.274 365.052 50.274Q368.93800000000005 50.274 371.8960000000001 51.956Q374.85400000000004 53.638 376.65200000000004 56.79899999999999Q378.45000000000005 59.959999999999994 378.56600000000003 64.542L376.65200000000004 60.946V39.66H381.002V82.0H377.52200000000005V68.37H378.91400000000004Q378.798 73.184 376.913 76.461Q375.028 79.738 371.98300000000006 81.362Q368.93800000000005 82.986 365.168 82.986ZM365.74800000000005 79.158Q368.88 79.158 371.403 77.76599999999999Q373.92600000000004 76.374 375.37600000000003 73.793Q376.826 71.212 376.826 67.848V65.064Q376.826 61.816 375.37600000000003 59.351Q373.92600000000004 56.885999999999996 371.403 55.494Q368.88 54.102000000000004 365.69 54.102000000000004Q362.26800000000003 54.102000000000004 359.745 55.755Q357.22200000000004 57.408 355.85900000000004 60.25Q354.49600000000004 63.092 354.49600000000004 66.63Q354.49600000000004 70.28399999999999 355.88800000000003 73.126Q357.28000000000003 75.968 359.832 77.563Q362.384 79.158 365.74800000000005 79.158Z M404.07200000000006 82.986Q400.12800000000004 82.986 397.22800000000007 81.623Q394.32800000000003 80.26 392.47200000000004 77.969Q390.61600000000004 75.678 389.71700000000004 72.836Q388.81800000000004 69.994 388.81800000000004 66.978V66.166Q388.81800000000004 63.208 389.71700000000004 60.366Q390.61600000000004 57.524 392.47200000000004 55.262Q394.32800000000003 53.0 397.1410000000001 51.637Q399.95400000000006 50.274 403.72400000000005 50.274Q408.53800000000007 50.274 411.75700000000006 52.42Q414.97600000000006 54.566 416.6 57.901Q418.22400000000005 61.236000000000004 418.22400000000005 65.064V67.326H390.79V63.962H415.208L414.10600000000005 65.644Q414.10600000000005 62.221999999999994 412.91700000000003 59.641Q411.72800000000007 57.06 409.43700000000007 55.581Q407.1460000000001 54.102000000000004 403.72400000000005 54.102000000000004Q400.12800000000004 54.102000000000004 397.75000000000006 55.784Q395.37200000000007 57.465999999999994 394.18300000000005 60.25Q392.994 63.034 392.994 66.572Q392.994 70.05199999999999 394.18300000000005 72.923Q395.37200000000007 75.794 397.83700000000005 77.476Q400.302 79.158 404.07200000000006 79.158Q408.07400000000007 79.158 410.5680000000001 77.331Q413.06200000000007 75.504 413.64200000000005 73.01H417.70200000000006Q417.12200000000007 76.084 415.2660000000001 78.31700000000001Q413.41 80.55 410.56800000000004 81.768Q407.72600000000006 82.986 404.07200000000006 82.986Z M432.4200000000001 82.0 421.63200000000006 51.318H426.09800000000007L436.77000000000004 82.0ZM433.58000000000004 82.0V78.462H439.09000000000003V82.0ZM435.958 82.0 445.29600000000005 51.318H449.588L440.076 82.0Z M465.98800000000006 82.87Q460.07200000000006 82.87 456.88200000000006 80.289Q453.69200000000006 77.708 453.63400000000007 73.358H457.6940000000001Q457.81000000000006 75.562 459.69500000000005 77.36Q461.58000000000004 79.158 465.98800000000006 79.158Q470.10600000000005 79.158 472.1650000000001 77.447Q474.22400000000005 75.736 474.22400000000005 73.3Q474.22400000000005 71.038 472.51300000000003 69.791Q470.802 68.544 467.55400000000003 68.196L464.07400000000007 67.848Q459.898 67.384 457.317 65.267Q454.73600000000005 63.15 454.73600000000005 59.438Q454.73600000000005 56.712 456.12800000000004 54.682Q457.52000000000004 52.652 460.043 51.521Q462.56600000000003 50.39 465.98800000000006 50.39Q470.91800000000006 50.39 474.0210000000001 52.71Q477.124 55.03 477.182 59.322H473.12200000000007Q473.064 57.117999999999995 471.2660000000001 55.61Q469.4680000000001 54.102000000000004 465.98800000000006 54.102000000000004Q462.39200000000005 54.102000000000004 460.62300000000005 55.668Q458.85400000000004 57.233999999999995 458.85400000000004 59.495999999999995Q458.85400000000004 61.41 460.18800000000005 62.657Q461.52200000000005 63.903999999999996 464.36400000000003 64.194L467.84400000000005 64.542Q472.48400000000004 65.064 475.413 67.21Q478.34200000000004 69.356 478.34200000000004 73.358Q478.34200000000004 76.084 476.80500000000006 78.259Q475.26800000000003 80.434 472.48400000000004 81.652Q469.70000000000005 82.87 465.98800000000006 82.87Z" fill="#aab0ff"/></svg>
+      <div class="head" style="margin:0"><h2>Hecho por Orbital Devs</h2><p>Detrás de PRE CADETE está Orbital Devs, co-desarrolladora de Asciende PNP. Esa misma experiencia es la que hoy ponemos al servicio de los postulantes.</p></div>
+    </div>
+    <article class="asc"><img src="asciende.png" alt="Logo de Asciende PNP" width="76" height="76"><div><small>También de nuestro equipo</small><b>Asciende PNP</b><p>Aplicación de preparación para el ascenso de grado en la PNP, ya consolidada en el mercado.</p></div></article>
+  </div>
+</div></section>
+
+<section class="band dl" id="descarga"><div class="wrap"><div class="inner">
+  <svg class="em" viewBox="4 2 92 96" data-emblem></svg>
+  <h2>Empieza a prepararte con PRE CADETE</h2>
+  <p>Descarga la app, haz tu primer examen completo y descubre en qué cursos debes reforzar.</p>
+  <a class="gp" data-play href="#descarga"><svg viewBox="0 0 24 24" fill="#fff"><path d="M4 3.5v17a1 1 0 0 0 1.5.86l14.5-8.5a1 1 0 0 0 0-1.72L5.5 2.64A1 1 0 0 0 4 3.5z"/></svg><span><small>Muy pronto en</small><b>Google Play</b></span></a>
+</div></div></section>
+
+<a class="wa" id="waf" href="#descarga" rel="noopener" aria-label="Más información por WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" data-wa-ic></svg></a>
+
+<footer><div class="wrap">
+  <a class="logo" href="#inicio"><svg viewBox="4 2 92 96" data-emblem></svg><b>PRE CADETE</b></a>
+  <div class="redes" id="redes"></div>
+  <div class="flinks"><a href="/privacidad/">Política de privacidad</a><a href="/terminos/">Términos y condiciones</a><a href="/eliminar-cuenta.html">Eliminar mis datos</a></div>
+  <span class="by">© 2026 PRE CADETE · Desarrollado por <img src="orbital-mark.svg" alt="" width="18" height="18"> Orbital Devs</span>
+  <p class="note">PRE CADETE es una herramienta de estudio independiente y no está afiliada a la Policía Nacional del Perú.</p>
+</div></footer>
+
+<script src="config.js"></script>
+<script>
+{
+const I = {
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21a2 2 0 0 1 2-2h13v2H6"/>',
+  redo:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  hist:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+  bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+  speaker:'<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 0 1 0 7M19.5 6a8.5 8.5 0 0 1 0 12"/>',
+  mark:'<path d="M6 3h12v18l-6-4-6 4z"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  brain:'<path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"/>',
+  mind:'<path d="M12 21v-3M8.5 18h7"/><path d="M12 3a7 7 0 0 0-7 7c0 2.6 1.4 4.8 3.5 6h7c2.1-1.2 3.5-3.4 3.5-6a7 7 0 0 0-7-7z"/><path d="M9.5 10.5c.8-1.6 4.2-1.6 5 0"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+  ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+};
+const ic = (k, w = 2) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${I[k]}</svg>`;
+
+const EMBLEM = '<path d="M50 6l38 12v28c0 25-16 40-38 48C28 86 12 71 12 46V18z" fill="#5b5ff0"/><path d="M50 6l38 12v28c0 25-16 40-38 48z" fill="#4a4ee0"/><path d="M50 14l30 9.5V46c0 20-12.5 32-30 39-17.5-7-30-19-30-39V23.5z" fill="none" stroke="#aab0ff" stroke-width="2"/><text x="50" y="60" text-anchor="middle" font-family="Georgia,serif" font-size="34" font-weight="700" fill="#fff" letter-spacing="-1">PC</text>';
+document.querySelectorAll('[data-emblem]').forEach(s => s.innerHTML = EMBLEM);
+
+const marcadas = [1, 3, 0, 2, 4, 1, 2];
+const SHEET = '<defs><linearGradient id="fg"><stop offset="0" stop-color="#47c6ff"/><stop offset="1" stop-color="#5b5ff0"/></linearGradient></defs><rect width="132" height="170" rx="10" fill="#f4f5ff"/><rect x="12" y="12" width="70" height="7" rx="3.5" fill="#c9ccf2"/><rect x="12" y="24" width="44" height="5" rx="2.5" fill="#dde0f7"/>' +
+  marcadas.map((m, r) => `<text x="12" y="${51 + r * 17}" font-size="8" font-family="Sora,sans-serif" fill="#8c90c4">${r + 1}</text>` +
+    [0, 1, 2, 3, 4].map(c => `<circle cx="${32 + c * 19}" cy="${48 + r * 17}" r="5.6" fill="${c === m ? 'url(#fg)' : 'none'}" stroke="${c === m ? 'none' : '#b9bde6'}" stroke-width="1.2"/>`).join('')).join('');
+document.querySelectorAll('[data-sheet]').forEach(s => s.innerHTML = SHEET);
+
+document.getElementById('mrows').innerHTML = [
+  ['book', 'Por materias', '7 cursos del examen de conocimientos'],
+  ['redo', 'Repaso', 'Tus preguntas erradas y guardadas'],
+  ['chart', 'Estadísticas', 'Tu avance general y por materia'],
+  ['hist', 'Historial', 'Tus intentos y notas anteriores']
+].map(([k, t, s]) => `<div class="mr"><i>${ic(k)}</i><div><b>${t}</b><span>${s}</span></div></div>`).join('');
+
+const feats = [
+  ['book', 'Por materias y módulos', 'Practica cada curso completo o módulo por módulo, eligiendo 10, 20, 50 o todas las preguntas.'],
+  ['check', 'Corrección al instante', 'Al marcar ves si acertaste, y con «Ver explicación» entiendes por qué esa es la respuesta.'],
+  ['redo', 'Repaso inteligente', 'Las preguntas que fallas se guardan solas para repasarlas, y puedes marcar las que quieras.'],
+  ['hist', 'Historial de notas', 'Cada intento queda guardado con su nota, aciertos y tiempo para que veas tu avance.'],
+  ['chart', 'Estadísticas y recomendaciones', 'Mira tu avance general y por materia, y la app te recomienda qué practicar para llegar listo.'],
+  ['speaker', 'Escucha las preguntas', 'Activa el audio y la app te lee la pregunta, las alternativas y la explicación.'],
+  ['layers', 'Materias de apoyo', 'Psicométrico, cultura general, evaluación psicológica y entrevista personal para el resto del proceso.']
+];
+document.getElementById('feats').innerHTML =
+  `<article class="card big"><svg class="f" viewBox="0 0 132 170">${SHEET.replace(/id="fg"/, 'id="fg2"').replace(/url\(#fg\)/g, 'url(#fg2)')}</svg><span class="ic">${ic('target')}</span><h3>Examen completo</h3><p>Las 100 preguntas con la distribución del prospecto, con cronómetro de 3 horas y tu nota sobre 20 al terminar, con el detalle por curso.</p><div class="chips"><span>100 preguntas</span><span>3 horas</span><span>Nota mínima 11</span></div></article>` +
+  feats.map(([k, t, p]) => `<article class="card"><span class="ic">${ic(k)}</span><h3>${t}</h3><p>${p}</p></article>`).join('');
+
+const cursos = [['Matemáticas', 15], ['Comunicación', 15], ['Ciencias Sociales', 10], ['Ciencia, Tecnología y Ambiente', 15], ['Persona, Familia y Relaciones Humanas', 15], ['Razonamiento Matemático', 15], ['Razonamiento Verbal', 15]];
+document.getElementById('courses').innerHTML = cursos.map(([n, q]) => `<div class="course"><b>${n}</b><div class="bar"><i style="width:${q / 15 * 100}%"></i></div><span>${q}</span></div>`).join('');
+
+document.getElementById('apoyo').innerHTML = [
+  ['brain', 'Psicométrico', 'Analogías, series, razonamiento espacial y atención'],
+  ['globe', 'Cultura general', 'Historia, geografía, realidad nacional y PNP'],
+  ['mind', 'Evaluación psicológica', 'Guía para los test de personalidad, dibujos y la entrevista psicológica'],
+  ['user', 'Entrevista personal', 'Guía para prepararte, presentarte y responder ante la junta']
+].map(([k, t, s]) => `<div class="ap"><i>${ic(k)}</i><div><b>${t}</b><span>${s}</span></div></div>`).join('');
+
+const DEMO = [
+  {tg: 'MATEMÁTICAS', en: 'Si 3x − 5 = 16, ¿cuál es el valor de x?', al: ['5', '6', '7', '8', '9'], c: 2, ex: 'Sumamos 5 a ambos lados: 3x = 21. Luego dividimos entre 3: x = 7.'},
+  {tg: 'RAZONAMIENTO VERBAL', en: 'Elige el sinónimo de EFÍMERO.', al: ['Eterno', 'Pasajero', 'Firme', 'Antiguo', 'Lejano'], c: 1, ex: 'Efímero significa que dura poco tiempo. Por eso su sinónimo es pasajero; eterno es su antónimo.'},
+  {tg: 'CIENCIAS SOCIALES', en: '¿En qué año se proclamó la independencia del Perú?', al: ['1810', '1821', '1824', '1836', '1879'], c: 1, ex: 'José de San Martín proclamó la independencia en Lima el 28 de julio de 1821. En 1824 se consolidó con las batallas de Junín y Ayacucho.'}
+];
+const L = ['A', 'B', 'C', 'D', 'E'];
+const demo = document.getElementById('demo');
+let dq = 0, dr = null, dx = false;
+function pintar() {
+  const q = DEMO[dq], hecha = dr !== null, bien = dr === q.c;
+  const cls = k => !hecha ? '' : k === q.c ? 'ok' : k === dr ? 'no' : 'dim';
+  const mk = k => !hecha ? '' : k === q.c ? ic('ok', 3) : k === dr ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' : '';
+  demo.innerHTML = `<div class="dtop"><span class="tg">${q.tg}</span><em>Pregunta de ejemplo ${dq + 1} de ${DEMO.length}</em></div>
+    <p class="en">${q.en}</p>
+    ${q.al.map((a, k) => `<button class="dop ${cls(k)}" data-k="${k}" ${hecha ? 'disabled' : ''}><span class="l">${L[k]}</span><span class="x">${a}</span>${mk(k)}</button>`).join('')}
+    ${hecha ? `<div class="dv ${bien ? 'ok' : 'no'}"><i>${bien ? ic('ok', 3) : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'}</i><div><b>${bien ? '¡Respuesta correcta!' : 'Respuesta incorrecta'}</b><span>${bien ? 'Así se corrige cada pregunta en la app.' : `La correcta es la ${L[q.c]}: ${q.al[q.c]}.`}</span></div></div>
+      ${dx ? `<div class="dexp"><small>EXPLICACIÓN · RESPUESTA ${L[q.c]}</small>${q.ex}</div>` : ''}
+      <div class="dact">${dx ? '' : `<button class="btn g" id="dexp">${ic('bulb')}Ver explicación</button>`}<button class="btn p" id="dnext">Otra pregunta</button></div>` : ''}`;
+  demo.querySelectorAll('.dop').forEach(b => b.onclick = () => { dr = +b.dataset.k; pintar(); });
+  const e = demo.querySelector('#dexp'); if (e) e.onclick = () => { dx = true; pintar(); };
+  const n = demo.querySelector('#dnext'); if (n) n.onclick = () => { dq = (dq + 1) % DEMO.length; dr = null; dx = false; pintar(); };
+}
+pintar();
+
+document.getElementById('ticks').innerHTML = [
+  ['Verde o rojo al instante', 'La alternativa correcta se marca en el momento.'],
+  ['Explicación de cada respuesta', 'Entiende la base de la pregunta, no solo cuál era la respuesta.'],
+  ['Guarda las que te cuestan', 'Márcalas y repásalas después desde la sección Repaso.'],
+  ['Revisión al terminar', 'Mira tus respuestas una por una o filtra solo los errores.']
+].map(([t, s]) => `<li><i>${ic('ok', 3)}</i><div><b>${t}</b><span>${s}</span></div></li>`).join('');
+}
+</script>
+<script src="comun.js"></script>
+</body>
+</html>

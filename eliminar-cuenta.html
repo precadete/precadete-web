@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eliminar mis datos · PRE CADETE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: trámite claro y directo, sin letra pequeña
+   IDEA: la ficha de solicitud que se entrega en ventanilla
+   PICTURE: el escudo PC en la cabecera y los pasos numerados de la solicitud
+   COLOUR and TYPE: noche #060816, índigo #5b5ff0, lavanda #aab0ff; Sora + Manrope
+   LAYOUT: una columna de 760px: pasos, qué se borra, qué se conserva */
+:root{color-scheme:dark;--bg:#060816;--s1:#0f1330;--line:#262c66;--ink:#eef0ff;--mute:#a3a8d4;--lav:#aab0ff;--p1:#5b5ff0;--p2:#3a2fa8}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 Manrope,system-ui,sans-serif;overflow-x:clip}
+a{color:var(--lav)}a:focus-visible,button:focus-visible{outline:2px solid var(--lav);outline-offset:3px;border-radius:6px}
+h1,h2{font-family:Sora,Manrope,sans-serif;line-height:1.15;text-wrap:balance}
+.nav{border-bottom:1px solid #ffffff12}
+.nav div{max-width:760px;margin:0 auto;padding:0 20px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo svg{width:32px;height:34px}.logo b{font:700 15px Sora,sans-serif;letter-spacing:2.5px}
+.back{font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+main{max-width:760px;margin:0 auto;padding:48px 20px 72px}
+h1{font-size:clamp(32px,5vw,44px);margin:0 0 12px;font-weight:800}
+.lead{color:var(--mute);font-size:17px;margin:0 0 32px}
+h2{font-size:22px;margin:40px 0 12px}
+p,li{color:#d3d6f5}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:12px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:14px;background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.steps li::before{content:counter(s);width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font:700 15px Sora,sans-serif;background:linear-gradient(180deg,var(--p1),var(--p2));color:#fff}
+.acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:14px;font-weight:700;text-decoration:none;color:#fff;flex:1 1 220px}
+.btn.p{background:linear-gradient(180deg,var(--p1),var(--p2));border:1px solid #8a90ff}
+.btn.g{border:1px solid #353c86;background:#ffffff08;color:var(--ink)}
+.btn[aria-disabled=true]{opacity:.4;pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.card b{font:700 16px Sora,sans-serif}
+.card ul{margin:8px 0 0;padding-left:20px;font-size:15px}
+.note{font-size:14px;color:var(--mute)}
+footer{border-top:1px solid #ffffff12;color:#6a70a3;font-size:13px;text-align:center;padding:28px 20px}
+@media(max-width:600px){.grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<nav class="nav"><div><a class="logo" href="/"><svg viewBox="4 2 92 96" data-emblem></svg><b>PRE CADETE</b></a><a class="back" href="/">← Volver al inicio</a></div></nav>
+<main>
+<h1>Eliminar mis datos de PRE CADETE</h1>
+<p class="lead">PRE CADETE no usa cuentas con usuario y contraseña. Los únicos datos que guardamos fuera de tu celular son los de tu cuenta Premium y su progreso. Aquí puedes pedir que los eliminemos.</p>
+
+<h2>Cómo solicitarlo</h2>
+<ol class="steps">
+<li><span>Escríbenos por WhatsApp o al correo de PRE CADETE con el asunto <b>«Eliminar mis datos»</b>.</span></li>
+<li><span>Indica el <b>número de celular</b> con el que activaste el Premium o el <b>código de tu dispositivo</b> (lo ves en <b>Ajustes → Cuenta</b> dentro de la app).</span></li>
+<li><span>Eliminamos tus datos en un plazo máximo de <b>7 días</b> y te confirmamos por el mismo medio.</span></li>
+</ol>
+<div class="acts">
+  <a class="btn p" id="wa" href="#" rel="noopener">Escribir por WhatsApp</a>
+  <a class="btn g" id="mail" href="#">Enviar correo</a>
+</div>
+<p class="note" style="margin-top:12px">Correo: <b data-correo></b> · WhatsApp: <b data-wa></b></p>
+
+<h2>Qué se elimina y qué no</h2>
+<div class="grid">
+  <div class="card"><b>Se elimina</b><ul><li>Tu número de celular</li><li>El código de tu dispositivo</li><li>El proceso de tu plan Premium</li><li>Tu progreso guardado en la nube: historial, estadísticas, erradas y guardadas</li></ul></div>
+  <div class="card"><b>Se conserva</b><ul><li>Nada en nuestros servidores. Solo si la ley nos obliga guardaríamos el registro de pago por el plazo que exija, y luego se borra.</li></ul></div>
+</div>
+<p class="note" style="margin-top:14px">Al eliminar tus datos, el plan Premium deja de estar activo en tu dispositivo. La copia de tu progreso que queda en tu celular la puedes borrar tú: ve a <b>Ajustes del teléfono → Aplicaciones → PRE CADETE → Almacenamiento → Borrar datos</b>, o desinstala la app.</p>
+<p class="note">Más detalles en la <a href="/privacidad/">política de privacidad</a> y en los <a href="/terminos/">términos y condiciones</a>.</p>
+</main>
+<footer>© 2026 PRE CADETE · Orbital Devs · No afiliado a la Policía Nacional del Perú</footer>
+<script src="/config.js"></script>
+<script src="/comun.js"></script>
+</body>
+</html>
